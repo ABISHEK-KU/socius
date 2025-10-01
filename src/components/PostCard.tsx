@@ -24,7 +24,7 @@ import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
-type Post = Posts[number];
+type Post = NonNullable<Posts>[number];
 type Like = { userId: string };
 type Comment = {
   id: string;
