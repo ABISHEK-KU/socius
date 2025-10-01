@@ -25,23 +25,37 @@ import { toast } from "sonner";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
+type Like = { userId: string };
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  author: {
+    id: string;
+    username: string;
+    name: string | null;
+    image: string | null;
+  };
+};
+
 
 function PostCard({
   post,
   dbUserId,
 }: {
   post: Post;
-  dbUserId: string | null;
+  dbUserId?: string ;
 }) {
   const { user } = useUser();
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [hasLiked, setHasLiked] = useState(
-    post.likes.some((like) => like.userId === dbUserId)
-  );
-  const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes);
+  const [hasLiked, setHasLiked] = useState<boolean>(
+  dbUserId ? post.likes.some((like:Like) => like.userId === dbUserId) : false
+);
+
+  const [optimisticLikes, setOptmisticLikes] = useState<number>(post._count.likes);
   const [showComments, setShowComments] = useState(false);
 
   const handleLike = async () => {
@@ -53,7 +67,7 @@ function PostCard({
       await toggleLike(post.id);
     } catch (error) {
       setOptmisticLikes(post._count.likes);
-      setHasLiked(post.likes.some((like) => like.userId === dbUserId));
+      setHasLiked(post.likes.some((like:Like) => like.userId === dbUserId));
     } finally {
       setIsLiking(false);
     }
@@ -198,7 +212,7 @@ function PostCard({
             <div className="space-y-4 pt-4 border-t">
               <div className="space-y-4">
                 {/* DISPLAY COMMENTS */}
-                {post.comments.map((comment) => (
+                {post.comments.map((comment:Comment) => (
                   <div key={comment.id} className="flex space-x-3">
                     <Avatar className="size-8 flex-shrink-0">
                       <AvatarImage

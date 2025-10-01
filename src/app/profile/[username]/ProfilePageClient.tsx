@@ -79,10 +79,14 @@ export default function ProfilePageClient({
   };
   const handleFollow = async () => {
     if (!currentUser) return;
+    if (!user?.id) {
+      toast.error("User ID not found");
+      return;
+    }
 
     try {
       setIsUpdateFollowing(true);
-      await toggleFollow(user?.id);
+      await toggleFollow(user.id);
       setIsFollowing(!isFollowing);
     } catch (error) {
       toast.error("Failed to update follow status");
@@ -226,7 +230,7 @@ export default function ProfilePageClient({
             <div className="space-y-6">
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user?.id} />
+                  <PostCard key={post.id} post={post} dbUserId={user?.id??""} />
                 ))
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
@@ -240,7 +244,7 @@ export default function ProfilePageClient({
             <div className="space-y-6">
               {likedPosts.length > 0 ? (
                 likedPosts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user?.id} />
+                  <PostCard key={post.id} post={post} dbUserId={user?.id??""} />
                 ))
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
