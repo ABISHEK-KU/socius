@@ -10,7 +10,7 @@ interface CreateTaskRequest{
     title:string
 }
 
-let tasks:Task[]=[
+const tasks:Task[]=[
     {id:1,title:"learn Next.js", completed:false},{
     id:2,title:"build a Next js project", completed:false
     }

@@ -100,7 +100,9 @@ export default function ProfilePageClient({
     currentUser?.emailAddresses[0].emailAddress.split("@")[0] ===
       user?.username;
 
-  const formattedDate = format(new Date(user?.createdAt), "MMMM yyyy");
+const formattedDate = user?.createdAt
+  ? format(new Date(user.createdAt), "MMMM yyyy")
+  : "Unknown";
   return (
     <div className="max-w-3xl mx-auto">
       <div className="grid grid-cols-1 gap-6">
